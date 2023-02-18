@@ -28,7 +28,6 @@ export enum HighlightSubject {
  * @param Duration The duration of animation (in seconds)
  * @param HighlightBorder If true, this will highlight the node's
  * border in the specified highlight color.
- *
  * @see {@link HighlightSubject}
  */
 export interface HighlightProps {

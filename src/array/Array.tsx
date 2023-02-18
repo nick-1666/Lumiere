@@ -149,9 +149,9 @@ export class Array extends Rect {
         direction="row"
         gap={10}
         layout
-        offsetY={this.align() === Align.Top ? 1 : -1}
+        offsetY={this.align() === Align.Top ? -1 : 1}
         y={
-          this.align() === Align.Top ? this.size().y - 45 : -this.size().y + 65
+          this.align() === Align.Top ? this.size().y + 65 : -this.size().y - 45
         }
       >
         <Text {...WhiteLabel} text={this.name()} />

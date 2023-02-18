@@ -1,6 +1,10 @@
 {
   "name": "@sputnick/lumiere",
+<<<<<<< HEAD
   "version": "0.1.1",
+=======
+  "version": "0.0.3",
+>>>>>>> 5d461a4 (docs: Array Component)
   "description": "A styled component library used in my videos",
   "scripts": {
     "prepare": "husky install",
@@ -21,8 +25,8 @@
   "keywords": [
     "motion-canvas"
   ],
-  "author": "",
-  "homepage": "",
+  "author": "sputnick",
+  "homepage": "https://github.com/nick-1666/Lumiere",
   "peerDependencies": {
     "@motion-canvas/2d": "^2.3.0",
     "@motion-canvas/core": "^2.3.0",

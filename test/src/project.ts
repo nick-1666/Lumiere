@@ -1,7 +1,7 @@
 import {makeProject} from '@motion-canvas/core';
-import test from './scenes/test?scene';
+import ArrayTest from './scenes/ArrayTest?scene';
 
 export default makeProject({
-  scenes: [test],
+  scenes: [ArrayTest],
   background: '#141414',
 });
