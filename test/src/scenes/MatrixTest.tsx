@@ -11,13 +11,13 @@ export default makeScene2D(function* (view) {
     <Matrix
       ref={valueArr}
       values={[
-        [1, 2, 3],
-        [6, 8, 6],
-        [5, 7, 6],
+        [0.2, 0.5, 0.2],
+        [0.5, 1, 0.5],
+        [0.2, 0.5, 0.2],
       ]}
       y={-250}
-      name="value"
-      suffix={'&Str'}
+      name="weights"
+      suffix=""
       suffixColor={colors.red}
       align={Align.Top}
     />,
@@ -25,4 +25,6 @@ export default makeScene2D(function* (view) {
 
   yield* waitFor(0.5);
   yield* valueArr().highlight([1, 1], {Color: colors.NUMBER});
+  yield* valueArr().swapAndHighlight([1, 1], [0, 0], {Color: colors.KEYWORD});
+  yield* valueArr().swapAndHighlight([1, 1], [0, 0], {Color: colors.NUMBER});
 });

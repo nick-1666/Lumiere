@@ -170,8 +170,14 @@ export class Matrix extends Rect {
    */
   public *swap(pos1: number[], pos2: number[], duration = 0.2) {
     yield* all(
-      this.getBox(pos1).position(this.getBox(pos2).position(), duration),
-      this.getBox(pos2).position(this.getBox(pos1).position(), duration),
+      this.getBox(pos1).absolutePosition(
+        this.getBox(pos2).absolutePosition(),
+        duration,
+      ),
+      this.getBox(pos2).absolutePosition(
+        this.getBox(pos1).absolutePosition(),
+        duration,
+      ),
     );
 
     [
