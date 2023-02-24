@@ -1,4 +1,4 @@
-export const Colors = {
+export const colors = {
   whiteLabel: 'rgba(255, 255, 255, 0.54)',
   blackLabel: 'rgba(0, 0, 0, 0.87)',
   background: '#141414',
@@ -18,25 +18,25 @@ export const Colors = {
   blue: '#2196f3',
 };
 
-export const BaseFont = {
+export const baseFont = {
   fontFamily: 'JetBrains Mono',
   fontWeight: 700,
   fontSize: 28,
 };
 
-export const CodeFont = {
-  ...BaseFont,
+export const codeFont = {
+  ...baseFont,
   offsetY: -1,
   padding: 10,
   cache: true,
 };
 
-export const WhiteLabel = {
-  ...BaseFont,
-  fill: Colors.whiteLabel,
+export const whiteLabel = {
+  ...baseFont,
+  fill: colors.whiteLabel,
 };
 
-export const BlackLabel = {
-  ...BaseFont,
-  fill: Colors.blackLabel,
+export const blackLabel = {
+  ...baseFont,
+  fill: colors.blackLabel,
 };

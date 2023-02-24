@@ -15,14 +15,25 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
+
   "plugins": ["@typescript-eslint", "eslint-plugin-tsdoc"],
   "rules": {
+    "no-unused-vars": "warn",
+    "@typescript-eslint/naming-convention": [
+      "warn",
+      {
+        "selector": "variableLike",
+        "format": ["camelCase"]
+      }
+    ],
     "require-yield": "off",
     "@typescript-eslint/explicit-member-accessibility": "error",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-namespace": "off",
-    "tsdoc/syntax": "warn"
+    "tsdoc/syntax": "error",
+    "@typescript-eslint/array-type": "warn",
+    "@typescript-eslint/no-unused-vars": "warn"
   }
 }

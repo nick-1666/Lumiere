@@ -6,7 +6,7 @@ import {ThreadGenerator} from '@motion-canvas/core/lib/threading';
 import {easeInOutCubic, tween} from '@motion-canvas/core/lib/tweening';
 import {Color, PossibleColor} from '@motion-canvas/core/lib/types';
 import {createRef} from '@motion-canvas/core/lib/utils';
-import {BlackLabel, Colors, WhiteLabel} from '../Styles';
+import {blackLabel, colors, whiteLabel} from '../Styles';
 
 /**
  * An enum for highlighting a value, label or both
@@ -23,10 +23,10 @@ export enum HighlightSubject {
  * An interface for providing arguments to the
  * {@link ArrayEntry.highlight} method.
  *
- * @param Color The color to highlight in
- * @param Subject The subject to highlight
- * @param Duration The duration of animation (in seconds)
- * @param HighlightBorder If true, this will highlight the node's
+ * @param Color - The color to highlight in
+ * @param Subject - The subject to highlight
+ * @param Duration - The duration of animation (in seconds)
+ * @param HighlightBorder - If true, this will highlight the node's
  * border in the specified highlight color.
  * @see {@link HighlightSubject}
  */
@@ -71,11 +71,11 @@ export class ArrayEntry extends Rect {
         cornerSharpness={0.65}
         radius={10}
         size={[60, 60]}
-        fill={Colors.background}
+        fill={colors.background}
         gap={40}
-        padding={15}
+        padding={20}
         strokeFirst={true}
-        stroke={Colors.background}
+        stroke={colors.background}
         lineWidth={8}
         justifyContent="start"
         alignItems="center"
@@ -83,14 +83,14 @@ export class ArrayEntry extends Rect {
         layout={true}
       >
         <Text
-          {...WhiteLabel}
-          lineHeight={WhiteLabel.fontSize}
+          {...whiteLabel}
+          lineHeight={whiteLabel.fontSize}
           text={`${props.value}`}
         />
         <Text
-          lineHeight={WhiteLabel.fontSize}
-          {...WhiteLabel}
-          fontSize={BlackLabel.fontSize * 0.7}
+          lineHeight={whiteLabel.fontSize}
+          {...whiteLabel}
+          fontSize={blackLabel.fontSize * 0.7}
           text={`${props.label}`}
         />
       </Rect>,
@@ -98,14 +98,14 @@ export class ArrayEntry extends Rect {
   }
 
   public *highlightBorder(
-    HighlightColor: PossibleColor = Colors.background,
-    Duration = 0.2,
+    highlightColor: PossibleColor = colors.background,
+    duration = 0.2,
   ) {
-    yield* tween(Duration, value => {
+    yield* tween(duration, value => {
       this.ref().stroke(
         Color.lerp(
           this.ref().stroke() as Color,
-          new Color(HighlightColor),
+          new Color(highlightColor),
           easeInOutCubic(value),
         ),
       );
@@ -114,14 +114,14 @@ export class ArrayEntry extends Rect {
 
   private *highlightText(
     node: Rect,
-    HighlightColor: PossibleColor = Colors.background,
-    Duration = 0.2,
+    highlightColor: PossibleColor = colors.background,
+    duration = 0.2,
   ) {
-    yield* tween(Duration, value => {
+    yield* tween(duration, value => {
       node.fill(
         Color.lerp(
           node.fill() as Color,
-          new Color(HighlightColor),
+          new Color(highlightColor),
           easeInOutCubic(value),
         ),
       );
@@ -129,19 +129,19 @@ export class ArrayEntry extends Rect {
   }
 
   public *highlightLabel(
-    HighlightColor: PossibleColor = Colors.background,
-    Duration = 0.2,
+    highlightColor: PossibleColor = colors.background,
+    duration = 0.2,
   ) {
     const label = this.ref().children()[1] as Rect;
-    yield* this.highlightText(label, HighlightColor, Duration);
+    yield* this.highlightText(label, highlightColor, duration);
   }
 
   public *highlightValue(
-    HighlightColor: PossibleColor = Colors.background,
-    Duration = 0.2,
+    highlightColor: PossibleColor = colors.background,
+    duration = 0.2,
   ) {
     const label = this.ref().children()[0] as Rect;
-    yield* this.highlightText(label, HighlightColor, Duration);
+    yield* this.highlightText(label, highlightColor, duration);
   }
 
   /**
@@ -152,7 +152,7 @@ export class ArrayEntry extends Rect {
    */
   public *highlight(
     options: HighlightProps = {
-      Color: Colors.background,
+      Color: colors.background,
       Duration: 0.2,
       HighlightBorder: true,
       Subject: HighlightSubject.Both,
@@ -173,9 +173,9 @@ export class ArrayEntry extends Rect {
         break;
       case HighlightSubject.Both:
       default:
-        if (options.Color == Colors.background) {
-          tasks.push(this.highlightValue(Colors.whiteLabel, options.Duration));
-          tasks.push(this.highlightLabel(Colors.whiteLabel, options.Duration));
+        if (options.Color == colors.background) {
+          tasks.push(this.highlightValue(colors.whiteLabel, options.Duration));
+          tasks.push(this.highlightLabel(colors.whiteLabel, options.Duration));
         } else {
           tasks.push(this.highlightValue(options.Color, options.Duration));
           tasks.push(this.highlightLabel(options.Color, options.Duration));

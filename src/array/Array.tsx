@@ -14,7 +14,7 @@ import {
 } from '@motion-canvas/core/lib/signals';
 import {ColorSignal, PossibleColor} from '@motion-canvas/core/lib/types';
 import {createRef, makeRef, range} from '@motion-canvas/core/lib/utils';
-import {Colors, WhiteLabel} from '@components/Styles';
+import {colors, whiteLabel} from '@components/Styles';
 import {ArrayEntry, HighlightProps, HighlightSubject} from './ArrayEntry';
 
 /**
@@ -58,12 +58,12 @@ export enum Align {
   Botom,
 }
 /**
- * @param values The values of the array
- * @param name The name of the array
- * @param suffix The suffix of the name
- * @param suffixColor Used for coloring the
+ * @param values - The values of the array
+ * @param name - The name of the array
+ * @param suffix - The suffix of the name
+ * @param suffixColor - Used for coloring the
  * suffix
- * @param align The alignment of the array's name
+ * @param align - The alignment of the array's name
  *
  * @see {@link LabeledArray}, {@link Align}
  *
@@ -95,7 +95,7 @@ export class Array extends Rect {
   @signal()
   public declare readonly suffix: SimpleSignal<string, this>;
 
-  @initial(Colors.blue)
+  @initial(colors.blue)
   @signal()
   public declare readonly suffixColor: ColorSignal<this>;
 
@@ -140,7 +140,7 @@ export class Array extends Rect {
       smoothCorners: true,
       cornerSharpness: 0.65,
       radius: 20,
-      fill: Colors.surface,
+      fill: colors.surface,
       ...props,
     });
 
@@ -154,48 +154,48 @@ export class Array extends Rect {
           this.align() === Align.Top ? this.size().y + 65 : -this.size().y - 45
         }
       >
-        <Text {...WhiteLabel} text={this.name()} />
-        <Text {...WhiteLabel} fill={this.suffixColor()} text={this.suffix()} />
+        <Text {...whiteLabel} text={this.name()} />
+        <Text {...whiteLabel} fill={this.suffixColor()} text={this.suffix()} />
       </Layout>,
     );
   }
   /**
    * Highlight a node in the array
-   * @param Index The index of the node
+   * @param Index - The index of the node
    * that will be highlighted
    *
    * @see {@link HighlightProps}
    */
-  public *highlight(Index: number, props: HighlightProps) {
-    yield* this.boxArray()[Index].highlight(props);
+  public *highlight(index: number, props: HighlightProps) {
+    yield* this.boxArray()[index].highlight(props);
   }
 
   /**
    * Highlight just the border of a node
    * in the array.
-   * @param Index The index of the node
+   * @param index - The index of the node
    * who's border will be highlighted
-   * @param Color The color to highlight in
-   * @param Duration The duration (in seconds)
+   * @param color - The color to highlight in
+   * @param duration - The duration (in seconds)
    * of the highlight animation
    */
   public *highlightBorder(
-    Index: number,
-    Color: PossibleColor = Colors.background,
-    Duration = 0.2,
+    index: number,
+    color: PossibleColor = colors.background,
+    duration = 0.2,
   ) {
-    yield* this.boxArray()[Index].highlightBorder(Color, Duration);
+    yield* this.boxArray()[index].highlightBorder(color, duration);
   }
 
   /**
    * Animate the swap of two nodes in the
    * array component.
    *
-   * @param index1 The first node's index
-   * @param index2 The second node's index
-   * @param Duration The duration (in seconds) of the swap animation
+   * @param index1 - The first node's index
+   * @param index2 - The second node's index
+   * @param duration - The duration (in seconds) of the swap animation
    */
-  public *swap(index1: number, index2: number, Duration = 0.2) {
+  public *swap(index1: number, index2: number, duration = 0.2) {
     const temp = createRef<Node>();
 
     this.add(<Node ref={temp} />);
@@ -205,11 +205,11 @@ export class Array extends Rect {
     yield* all(
       this.boxArray()[index1].position(
         this.boxArray()[index2].position(),
-        Duration,
+        duration,
       ),
       this.boxArray()[index2].position(
         this.boxArray()[index1].position(),
-        Duration,
+        duration,
       ),
     );
     const arr = toLabeledArray(this.values());
@@ -234,12 +234,12 @@ export class Array extends Rect {
    * Swap two node's positions and highlight them before
    * doing so
    *
-   * @param index1 The first node's index
-   * @param index2 The Second node's index
-   * @param props {@link HighlightProps}
-   * @param swapDuration The animation duration (in seconds) of
+   * @param index1 - The first node's index
+   * @param index2 - The Second node's index
+   * @param props - {@link HighlightProps}
+   * @param swapDuration - The animation duration (in seconds) of
    * _just_ the swap and _not_ the highlight animation period.
-   * @param segment If true, highlight each node in
+   * @param segment - If true, highlight each node in
    * sequence and then swap, rather than highlighting
    * both simultaneously
    *
@@ -252,7 +252,7 @@ export class Array extends Rect {
     index1: number,
     index2: number,
     props: HighlightProps = {
-      Color: Colors.blue,
+      Color: colors.blue,
       Duration: 0.2,
       HighlightBorder: true,
       Subject: HighlightSubject.Both,
@@ -270,8 +270,8 @@ export class Array extends Rect {
       yield* all(this.highlight(index1, props), this.highlight(index2, props));
       yield* this.swap(index1, index2, swapDuration);
       yield* all(
-        this.highlight(index1, {...props, Color: Colors.background}),
-        this.highlight(index2, {...props, Color: Colors.background}),
+        this.highlight(index1, {...props, Color: colors.background}),
+        this.highlight(index2, {...props, Color: colors.background}),
       );
     }
   }
