@@ -6,16 +6,23 @@ import {
   Text,
 } from '@motion-canvas/2d/lib/components';
 import {initial, signal} from '@motion-canvas/2d/lib/decorators';
-import {all} from '@motion-canvas/core/lib/flow';
+import {all, chain} from '@motion-canvas/core/lib/flow';
 import {
   createSignal,
   SignalValue,
   SimpleSignal,
 } from '@motion-canvas/core/lib/signals';
 import {ColorSignal, PossibleColor} from '@motion-canvas/core/lib/types';
-import {createRef, makeRef, range} from '@motion-canvas/core/lib/utils';
+import {createRef, range, makeRef} from '@motion-canvas/core/lib/utils';
 import {colors, whiteLabel} from '@components/Styles';
 import {ArrayEntry, HighlightProps, HighlightSubject} from './ArrayEntry';
+import {
+  map,
+  tween,
+  easeInOutCubic,
+  deepLerp,
+} from '@motion-canvas/core/lib/tweening';
+import {ThreadGenerator, Promisable} from '@motion-canvas/core/lib/threading';
 
 /**
  * Used for setting the label
@@ -151,7 +158,7 @@ export class Array extends Rect {
         layout
         offsetY={this.align() === Align.Top ? -1 : 1}
         y={
-          this.align() === Align.Top ? this.size().y + 65 : -this.size().y - 45
+          this.align() === Align.Top ? this.size().y + 20 : -this.size().y - 20
         }
       >
         <Text {...whiteLabel} text={this.name()} />
@@ -274,5 +281,101 @@ export class Array extends Rect {
         this.highlight(index2, {...props, Color: colors.background}),
       );
     }
+  }
+
+  public *push(value: string | number, duration = 0.3) {
+    const opacity = createSignal(0);
+    const i = Object.keys(toLabeledArray(this.values())).length;
+
+    this.add(
+      <ArrayEntry
+        ref={makeRef(this.boxArray(), i)}
+        x={-((i * 80) / 2) + i * 80}
+        y={-50}
+        index={i}
+        value={value}
+        label={i}
+        opacity={() => opacity()}
+      />,
+    );
+
+    yield* tween(duration, v => {
+      this.boxArray().forEach((child, idx) => {
+        child.position.x(
+          map(child.position.x(), -(((i + 1) * 80) / 2) + idx * 80 + 40, v),
+        );
+      });
+      this.boxArray()[i].position.y(map(-50, 0, v));
+      this.size.x(map(this.size.x(), (i + 1) * 80 + 20, v));
+      opacity(map(0, 2, v));
+    });
+
+    (this.values() as any).push(value);
+  }
+
+  public *chainPush(values: string[] | number[], duration = 0.3) {
+    const tasks: ThreadGenerator[] = [];
+
+    values.forEach(v => {
+      tasks.push(this.push(v, duration));
+    });
+
+    yield* chain(...tasks);
+  }
+
+  public *pop(n = 1, duration = 0.3) {
+    const nodeIndexes: number[] = [];
+
+    for (let i = 0; i < n; i++) {
+      nodeIndexes.push(this.boxArray().length - i - 1);
+    }
+
+    const opacity = createSignal(1);
+    const yPos = createSignal(0);
+
+    nodeIndexes.forEach(i => {
+      this.boxArray()[i].opacity(() => opacity());
+      this.boxArray()[i].position.y(() => yPos());
+    });
+
+    const nodes = this.boxArray().filter((v, i) => !nodeIndexes.includes(i));
+
+    yield* tween(duration, t => {
+      nodes.forEach((node, i) => {
+        node.position.x(
+          map(
+            node.position.x(),
+            //(this.boxArray().length - n * 80) / 2)
+            i * 80 + 40 - ((this.boxArray().length - n) * 80) / 2,
+            t,
+          ),
+        );
+      });
+      this.size.x(
+        map(this.size.x(), (this.boxArray().length - n) * 80 + 20, t),
+      );
+      opacity(map(1, 0, t * 1.2));
+      yPos(map(0, 50, t));
+    });
+
+    this.boxArray()
+      .filter((v, i) => nodeIndexes.includes(i))
+      .forEach(n => {
+        n.removeChildren();
+        n.remove();
+      });
+    for (let i = 0; i < n; i++) {
+      this.boxArray().pop();
+      (this.values() as any).pop();
+    }
+  }
+
+  public *chainPop(n: number, duration = 0.3) {
+    const tasks: ThreadGenerator[] = [];
+    for (let i = 0; i < n; i++) {
+      tasks.push(this.pop(1, duration / n));
+    }
+
+    yield* chain(...tasks);
   }
 }

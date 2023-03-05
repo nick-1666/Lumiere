@@ -24,13 +24,13 @@
   "author": "sputnick",
   "homepage": "https://github.com/nick-1666/Lumiere",
   "peerDependencies": {
-    "@motion-canvas/2d": "^2.3.0",
-    "@motion-canvas/core": "^2.3.0",
+    "@motion-canvas/2d": "2.6",
+    "@motion-canvas/core": "2.6",
     "code-fns": "^0.8.2"
   },
   "devDependencies": {
-    "@motion-canvas/ui": "^2.3.0",
-    "@motion-canvas/vite-plugin": "^2.2.0",
+    "@motion-canvas/ui": "2.6",
+    "@motion-canvas/vite-plugin": "2.6",
     "@rollup/plugin-terser": "^0.4.0",
     "@rollup/plugin-typescript": "^11.0.0",
     "@typescript-eslint/eslint-plugin": "^5.51.0",
